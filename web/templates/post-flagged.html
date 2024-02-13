@@ -1,0 +1,44 @@
+{{define "post-flagged" }}
+<div style="height:10vh"></div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="7">Flaged posts</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ID</td>
+                <td>Author</td>
+                <td>Categories</td>
+                <td>Content</td>
+                <td>Creation date</td>
+            </tr>
+            {{range $val := .Posts}}
+                <tr>
+                    <td>{{$val.ID}}</td>
+                    <td>{{$val.Author}}</td>
+                    <td>
+                        {{range $cats := $val.CategoriesName}}
+                            {{$cats}}
+                        {{end}}
+                    </td>
+                    <td>{{$val.Content}}</td>
+                    <td>{{$val.CreationDate}}</td>
+                    <td class="no_border">
+                        <form action="/admin" method="POST">
+                            <button class="system_btn admin_del" type="submit" name="del_post_flag" value="{{$val.ID}}">Remove it from the reported list</button>
+                        </form>
+                    </td>
+                    <td class="no_border">
+                        <form action="/admin" method="POST">
+                            <button class="system_btn dislike admin_del" type="submit" name="del_post" value="{{$val.ID}}">Delete post</button>
+                        </form>
+                    </td>
+                </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+{{end}}

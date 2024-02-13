@@ -1,0 +1,8 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+    {{if .ErrorMessage}}
+    <h1>{{.ErrorMessage}}</h1>
+    {{ end }}
+</main>
+{{ template "footer" .}}

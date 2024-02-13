@@ -1,0 +1,24 @@
+{{ template "head" .}}
+
+<section class="form">
+  <a href="/" class="back_btn">Back Home</a>
+
+  <form action="" method="post">
+    <h5>Login</h5>
+    <div class="field">
+      <label for="">email</label>
+      <input type="email" name="email" />
+    </div>
+    <div class="field">
+      <label for="">Password</label>
+      <input type="password" name="password" />
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+  {{ if .ErrorMessage}}
+  <div class="alert">*{{ .ErrorMessage}}</div>
+  {{ end }}
+  <p>No account? <a href="/register"><span class="link">Register</span></a> now</p>
+</section>
+{{ template "footer" .}}

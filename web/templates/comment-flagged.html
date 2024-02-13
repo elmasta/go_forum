@@ -1,0 +1,40 @@
+{{define "comment-flagged" }}
+<div style="height:10vh"></div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="7">Flagged comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ID</td>
+                <td>Author</td>
+                <td>Post</td>
+                <td>Content</td>
+                <td>CreationDate</td>
+            </tr>
+            {{range $val := .Comments}}
+                <tr>
+                    <td>{{$val.ID}}</td>
+                    <td>{{$val.Author}}</td>
+                    <td>{{$val.Post}}</td>
+                    <td>{{$val.Content}}</td>
+                    <td>{{$val.CreationDate}}</td>
+                    <td class="no_border">
+                        <form action="/admin" method="POST">
+                            <button class="system_btn admin_del" type="submit" name="del_com_flag" value="{{$val.ID}}">Remove it from the reported list</button>
+                        </form>
+                    </td>
+                    <td class="no_border">
+                        <form action="/admin" method="POST">
+                            <button class="system_btn dislike admin_del" type="submit" name="del_com" value="{{$val.ID}}">Delete comment</button>
+                        </form>
+                    </td>
+                </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+{{end}}

@@ -1,0 +1,15 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+    <h1>Edit comment :</h1>
+    <div class="comment-create form">
+        <form method="POST" action="/post/id?id={{ .CurrentComment.PostID}}">
+            <div class="field">
+                <label for="content">Comment:</label>
+                <textarea id="content-editor" name="content-editor" rows="5" cols="33">{{.CurrentComment.Content}}</textarea>
+            </div>
+            <button type="submit" name="comment-editor" class="btn btn-primary" value="{{.CurrentComment.ID}}">Save</button>
+        </form>
+    </div>
+</main>
+{{ template "footer" .}}

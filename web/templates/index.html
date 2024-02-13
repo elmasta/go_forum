@@ -1,0 +1,23 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+  <h1>Recently add</h1>
+
+  {{range .Posts}}
+  <a href="/post/id?id={{ .ID }}">
+    <div class="post">
+      <h3>{{ .Title }}</h3>
+      <p>
+        {{range $cats := .CategoriesName}}
+          {{$cats}}
+        {{end}}
+      </p>
+      <p>{{.CreationDate}}</p>
+    </div>
+  </a>
+  {{end}}
+
+  <a href="/post">Show more</a>
+</main>
+
+{{ template "footer" .}}

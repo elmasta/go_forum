@@ -1,0 +1,54 @@
+{{define "comment" }}
+<div class="tab-comment">
+    {{ if .Connected }}
+    {{$adm := .Admin}}
+    {{$mod := .Moderator}}
+    {{$commod := .ModLight}}
+    {{ range .CurrentPost.Tab_comment}}
+    <div class="comment">
+        <div class="comment-head">
+            <h5>{{.Author}}</h5>
+            <p>{{.CreationDate}}</p>
+        </div>
+        <div class="comment-content">
+            <p>{{.Content}}</p>
+        </div>
+        <!-- style to put in scss -->
+        <form class="comment-rate" style="align-items: baseline" method="POST" action="/post/id?id={{ .PostID}}">
+            {{if .Flagged}}
+                <p class="flag-com" style="color:red;">This comment is being evaluated by a moderator</p>
+            {{else}}
+                <button class="system_btn" type="submit" name="report" value="{{ .ID}}">Report</button>
+            {{ end }}
+            {{if or (.IfCurrentUser) ($adm) ($mod) ($commod)}}
+                <button class="system_btn" type="delete" name="delete" value="{{ .ID}}">delete</button>
+                <button class="system_btn" type="submit" name="edit-comment" value="{{ .ID}}">edit</button>
+            {{ end }}
+            <button class="like_btn" type="submit" name="like" value="true {{ .ID}}">like : {{.Like}}</button>
+            <button class="dislike_btn" type="submit" name="like" value="false {{ .ID}}">dislike : {{.Dislike}}</button>
+        </form>
+    </div>
+    {{end}}
+    {{ else }}
+    {{ range .CurrentPost.Tab_comment}}
+    <div class="comment">
+        <div class="comment-head">
+            <h5>{{.Author}}</h5>
+            <p>{{.CreationDate}}</p>
+        </div>
+        <div class="comment-content">
+        <p>{{.Content}}</p>
+        </div>
+        <div class="comment-rate">
+            <span class="rate like">
+                like : {{.Like}}
+            </span> 
+            <span class="rate dislike">
+            dislike : {{.Dislike}}
+        </span> 
+        </div>
+    </div>
+    {{end}}
+    {{ end }}
+</div>
+{{ end }}

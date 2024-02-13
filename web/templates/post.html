@@ -1,0 +1,42 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+
+    <form class="filter" method="GET">
+        <div class="categories">
+            <label for="categories">Category</label>
+            <select class="categories-filter" name="categories" id="categories">
+                <option value="">-----</option>
+                {{range $val := .Categories}}
+                <option value={{$val.ID}}>{{$val.Title}}</option>
+                {{end}}
+            </select>
+        </div>
+        {{ if .Connected }}
+            <div class="liked">
+                <input type="checkbox" id="liked" name="liked" value="true"/>
+                <label for="liked">Liked posts</label>
+            </div>
+            <div class="created">
+                <input type="checkbox" id="created" name="created" value="true"/>
+                <label for="created">Created posts</label>
+            </div>
+        {{end}}
+        <input class="system_btn" type="submit" value="filter">
+    </form>
+
+{{range .Posts}}
+<a href="/post/id?id={{ .ID }}">
+<div class="post">
+            <h3>{{ .Title }}</h3>
+            <p>
+                {{range $cats := .CategoriesName}}
+                    {{$cats}}
+                {{end}}
+            </p>
+            <p>{{.CreationDate}}</p>
+        </div>
+    </a>
+    {{end}}
+</main>
+{{ template "footer" .}}

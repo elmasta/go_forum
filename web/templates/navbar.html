@@ -1,0 +1,25 @@
+{{define "navbar" }}
+
+<header>
+  <a href="/">Home</a>
+  <nav>
+    <a href="/post">Show Post</a>
+    {{ if .Connected }}
+      <a href="/profile">Profil</a>
+      {{if .Moderator}}
+      <a href="/moderation">Moderation</a>
+      {{else if .ModLight}}
+      <a href="/com_moderation">Comments Moderation</a>
+      {{end}}
+      {{if .Admin}}
+        <a href="/admin">Administration</a>
+      {{end}}
+      <a href="/post/create">Create Post</a>
+      <a href="/logout">Logout</a>
+    {{ else }}
+      <a href="/login">Login</a>
+    {{end}}
+  </nav>
+</header>
+
+{{end}}

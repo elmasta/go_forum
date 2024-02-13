@@ -1,0 +1,107 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+    <h1>Admin panel</h1>
+    <div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="9">Users</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>Type of user</td>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Validation status</td>
+                        <td>Date of registering</td>
+                    </tr>
+                    {{range $val := .UsersList}}
+                        <tr>
+                            <td>{{$val.ID}}</td>
+                            <td>{{$val.UserTypeTxt}}</td>
+                            <td>{{$val.Username}}</td>
+                            <td>{{$val.Email}}</td>
+                            <td>{{$val.Validation}}</td>
+                            <td>{{$val.FormattedTime}}</td>
+                            {{if eq $val.UserType 1}}
+                                <td class="no_border">
+                                    <form action="/admin" method="POST">
+                                        <button class="system_btn admin_del" type="submit" name="add_mod" value="{{$val.ID}}">Add moderation right</button>
+                                    </form>
+                                </td>
+                                <td class="no_border">
+                                    <form action="/admin" method="POST">
+                                        <button class="system_btn admin_del" type="submit" name="add_mod_light" value="{{$val.ID}}">Add comment moderation right</button>
+                                    </form>
+                                </td>
+                                <td class="no_border">
+                                    <form action="/admin" method="POST">
+                                        <button class="system_btn dislike admin_del" name="deletion" value="{{$val.ID}}">Delete user</button>
+                                    </form>
+                                </td>
+                            {{else if or (eq $val.UserType 2) (eq $val.UserType 4)}}
+                                <td class="no_border">
+                                    <form action="/admin" method="POST">
+                                        <button class="system_btn admin_del" type="submit" name="del_mod" value="{{$val.ID}}">Remove rights</button>
+                                    </form>
+                                </td>
+                                <td class="no_border">
+                                    <form action="/admin" method="POST">
+                                        <button class="system_btn dislike admin_del" type="submit" name="deletion" value="{{$val.ID}}">Delete user</button>
+                                    </form>
+                                </td>
+                            {{end}}
+                            {{if eq $val.AskedMod 1}}
+                                <td class="no_border" style="color:green">has asked to become a moderator</td>
+                            {{else if eq $val.AskedMod 2}}
+                                <td class="no_border" style="color:green">has asked to become a comment moderator</td>
+                            {{end}}
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        <div style="height:10vh"></div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="5">Categories</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>Title</td>
+                        <td>Description</td>
+                    </tr>
+                    {{range $val := .Categories}}
+                        <tr>
+                            <td>{{$val.ID}}</td>
+                            <td>{{$val.Title}}</td>
+                            <td>{{$val.Description}}</td>
+                            <td class="no_border">
+                                <a class="system_btn admin_del" href="/category?id={{$val.ID}}">Modify</a>
+                            </td>
+                            <td class="no_border">
+                                <form action="/admin" method="POST">
+                                    <button class="system_btn dislike admin_del" type="submit" name="del_cat" value="{{$val.ID}}">Delete category</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <a class="system_btn" href="/category">Create a category</a>
+        </div>
+        {{ template "post-flagged" .}}
+        {{ template "comment-flagged" .}}
+    </div>
+</main>
+{{ template "footer" .}}

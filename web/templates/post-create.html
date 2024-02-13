@@ -1,0 +1,45 @@
+{{ template "head" .}}
+{{ template "navbar" .}}
+  <main class="form">
+    <h1>Post Creation</h1>
+
+    <form enctype="multipart/form-data" name="postForm" action="" method="POST">
+    <!-- <form name="postForm" action="" method="POST"> -->
+      <div class="field">
+          <label for="title">Title</label>
+          <input type="text" name="title" value="{{ .CurrentPost.Title}}" required>
+        </div>
+    <div class="field">
+      <label for="categories">Category</label>
+      <div class="checkbox">
+        {{range $val := .Categories}}
+        {{ if $val.IfCurrentCat}}
+          <div>
+            <input type="checkbox" id="categories" name="categories" value="{{$val.ID}}" checked>
+                <label for="category{{$val.ID}}">{{$val.Title}}</label><br>
+              </div>
+          {{else}}
+          <div>
+            <input type="checkbox" id="categories" name="categories" value="{{$val.ID}}">
+            <label for="category{{$val.ID}}">{{$val.Title}}</label><br>
+          </div>
+          {{end}}
+        <!-- <div>
+          <input type="checkbox" id="category{{$val.ID}}" name="categories" value="{{$val.ID}}">
+          <label for="category{{$val.ID}}">{{$val.Title}}</label><br>
+        </div> -->
+        {{end}}
+      </div>
+    </div>
+    <div class="field">
+      <label for="content">Content</label>
+      <textarea id="" name="content" rows="10" cols="20" required>{{.CurrentPost.Content}}</textarea>
+      <label for="myFile">Add image</label>
+      <p>{{.ErrMessage}}</p>
+      <input type="file" name="myFile" accept=".svg,image/gif,image/png,image/jpeg"/>
+    </div>
+    <button type="submit">Create Post</button>
+  </form>
+</main>
+
+{{ template "footer" .}}

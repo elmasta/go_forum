@@ -1,0 +1,43 @@
+{{ template "head" .}}
+{{ template "navbar" .}}
+<main class="form">
+  <h1>Edit Post :</h1>
+  <form enctype="multipart/form-data" name="postForm" action="/post/id?id={{ .CurrentPost.ID}}" method="POST">
+    <div class="field">
+      <label for="title">Title</label>
+      <input type="text" name="title-editor" value="{{ .CurrentPost.Title}}">
+    </div>
+    <div class="field">
+      <label for="categories-editor">Category</label>
+        <div class="checkbox">
+
+          {{range $val := .Categories}}
+          {{ if $val.IfCurrentCat}}
+          <div>
+            <input type="checkbox" id="categories" name="categories-editor" value="{{$val.ID}}" checked>
+                <label for="category{{$val.ID}}">{{$val.Title}}</label><br>
+              </div>
+          {{else}}
+          <div>
+            <input type="checkbox" id="categories" name="categories-editor" value="{{$val.ID}}">
+            <label for="category{{$val.ID}}">{{$val.Title}}</label><br>
+          </div>
+          {{end}}
+          {{end}}
+        </div>
+    </div>
+    <div class="field">
+      <label for="content-editor">Content</label>
+      <textarea id="" name="content-editor" rows="10" cols="20">{{.CurrentPost.Content}}</textarea>
+      <label for="myFile">new image?</label>
+      <input type="file" name="myFile" accept=".svg,image/gif,image/png,image/jpeg"/>
+      <p>{{.ErrMessage}}</p>
+      <div class="check">
+        <label for="deleteimg">delete image?</label>
+        <input type="checkbox" name="deleteimg" value="true" >  
+      </div>
+    </div>
+    <button type="submit" name="post-editor" value="{{ .CurrentPost.ID}}">Save</button>
+  </form>
+</main>
+{{ template "footer" .}}

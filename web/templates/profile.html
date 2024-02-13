@@ -1,0 +1,82 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+    <div>
+        {{if .Admin}}
+            <div>Your current status is administrator</div>
+        {{else if .Moderator}}
+            <div>Your current status is moderator</div>
+        {{else if .ModLight}}
+            <div>Your current status is comment moderator</div>
+        {{else}}
+            <div>Your current status is regular user</div>
+        {{end}}
+        <div>
+            {{if and (eq .User.AskedMod 0) (eq .User.UserType 1)}}
+                <form action="/profile" method="post">
+                    <button type="submit" name="ask_mod" value="{{.User.ID}}">Ask to become a moderator.</button>
+                </form>
+                <div>or</div>
+                <form action="/profile" method="post">
+                    <button type="submit" name="ask_light_mod" value="{{.User.ID}}">Ask to become a comment moderator.</button>
+                </form>
+            {{else if eq .User.AskedMod 1}}
+                <div>Your demande to become a moderator is being examinated.</div>
+            {{else if eq .User.AskedMod 2}}
+                <div>Your demande to become a comment moderator is being examinated.</div>
+            {{end}}
+        </div>
+        {{ if .Connected}}
+            <div class="content">
+                <div class="data">
+                    <h2>Liked post</h2>
+                    {{ range .Data.Likedpost}}
+                    <div class="post"><a href="/post/id?id={{.ID}}">Title : {{.Title}} Creation date : {{.CreationDate}}</a></div>
+                    {{ end }}
+                    <h2>Disliked post</h2>
+                    {{ range .Data.Dislikedpost}}
+                    <div class="post"><a href="/post/id?id={{.ID}}">Title : {{.Title}} Creation date : {{.CreationDate}}</a></div>
+                    {{ end }}
+                    <h2>Liked comment</h2>
+                    {{ range .Data.Likedcomment}}
+                    <div class="post"><a href="/post/id?id={{.Post.ID}}">Post title : {{.Post.Title}}
+                        <br>Comment content: {{.Comment.Content}}</br></a></div>
+                    {{ end }}
+                    <h2>Disliked comment</h2>
+                    {{ range .Data.Dislikedcomment}}
+                    <div class="post"><a href="/post/id?id={{.Post.ID}}">Post title : {{.Post.Title}}
+                        <br>Comment content: {{.Comment.Content}}</br></a></div>
+                    {{ end }}
+                </div>
+                <div class="notified">
+                    <h2>Notified</h2>
+                    {{range .Data.Notified}}
+                        <div class="post"><a href="/post/id?id={{.Post.ID}}">Post title : {{.Post.Title}}</a>
+                            <br><label for="listcomment">List comment :</label></br>
+                            <lu name="listcomment">
+                                {{range .Tab_comment}}
+                                    <li>{{.Author}} commented : {{.Content}}</li>
+                                {{end}}
+                            </lu>
+                        
+                            <br><label for="listcomment">List reactions :</label></br>
+                            <lu name="listliked">
+                                {{range .Tabliked}}
+                                    <li>{{.Username}} 
+                                        {{ if .Is_Liked}}
+                                            liked post
+                                        {{else}}
+                                            disliked post
+                                        {{end}}
+                                    </li>
+                                {{end}}
+                            </lu>
+                        </div>
+                    {{end}}
+                </div>
+            </div>
+        {{end}}
+        <!-- make other functionnality, user data available with .User -->
+    </div>
+</main>
+{{ template "footer" .}}

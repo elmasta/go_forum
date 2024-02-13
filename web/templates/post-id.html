@@ -1,0 +1,48 @@
+{{ template "head" .}} 
+{{ template "navbar" .}}
+<main>
+<a href="/post" class="back_btn">Back</a>
+    <div class="post-details">
+        <h1>{{ .CurrentPost.Title }}</h1>
+        <div class="head-post">
+            <p>Category: {{range $val := .CurrentPost.CategoriesName}}{{$val}}, {{end}}</p>
+            <p>Author: {{.CurrentPost.Author}}</p>
+            <p>Date: {{.CurrentPost.CreationDate}}</p>
+        </div>
+        <div class="body-post">
+            {{if .CurrentPost.Ifimg}}
+                <img src="/img/post{{.CurrentPost.ID}}/{{.CurrentPost.Img}}"/>
+            {{end}}
+            <p>{{.CurrentPost.Content}}</p>
+        </div>
+    {{ if .Connected }}
+        <form class="comment-rate" style="align-items: baseline;" method="POST" action="/post/id?id={{ .CurrentPost.ID}}">
+            {{if .CurrentPost.Flagged}}
+                <p style="color:red;">This post is being evaluated by a moderator</p>
+            {{else}}
+                <button class="system_btn" type="submit" name="report-post" value="{{ .CurrentPost.ID}}">Report</button>
+            {{end}}
+            {{if or (.CurrentPost.IfCurrentUser) (.Admin) (.Moderator)}}
+            <button class="system_btn" type="delete" name="delete-post" value="{{ .CurrentPost.ID}}">delete</button>
+            <button class="system_btn" type="submit" name="edit-post" value="{{ .CurrentPost.ID}}">edit</button>
+            {{ end }}
+            <button class="like_btn" type="submit" name="like-post" value="true {{ .CurrentPost.ID}}">like : {{.CurrentPost.Like}}</button>
+            <button class="dislike_btn" type="submit" name="like-post" value="false {{ .CurrentPost.ID}}">dislike : {{.CurrentPost.Dislike}}</button>
+        </form>
+    {{else}}
+    <div class="comment-rate">
+        <span class="rate like">
+            like : {{.CurrentPost.Like}}
+        </span> 
+        <span class="rate dislike">
+        dislike : {{.CurrentPost.Dislike}}
+    </span> 
+    </div>
+    {{ end }}
+    </div>
+    {{ template "comment" .}}
+    {{ if .Connected}}
+    {{ template "comment-create" .}}
+    {{ end }}
+</main>
+{{ template "footer" .}}
